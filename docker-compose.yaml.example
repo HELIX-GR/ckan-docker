@@ -1,0 +1,81 @@
+volumes:
+  solr_data:
+  pg_data:
+  ckan_data:
+
+services:
+
+  # docker compose run --rm -T ckan_chown_ckan_data
+  ckan_chown_ckan_data:
+    image: busybox:1
+    entrypoint:
+    - sh
+    - -ue
+    - -c
+    - >-
+      chown 1000:1000 -vR /var/lib/ckan/default
+    volumes:
+    - type: volume
+      source: ckan_data
+      target: /var/lib/ckan/default 
+ 
+  ckan:
+    image: localhost/ckan:${CKAN_TAG}
+    user: '1000:1000'
+    environment: &ckan_environment
+      CKAN_SITE_ID: default
+      CKAN_SITE_URL:
+      CKAN_REDIS_URL: redis://redis:6379/1
+      CKAN_SOLR_URL: http://solr:8983/solr/ckan
+      CKAN_SQLALCHEMY_URL: >-
+        postgresql://ckan:${_CKAN_DB_PASSWORD}@postgres/ckan
+      CKAN_STORAGE_PATH: /var/lib/ckan/default
+    volumes: &ckan_volumes
+    - type: volume
+      source: ckan_data
+      target: /var/lib/ckan/default 
+    ports:
+    - '5000:5000'
+
+  # docker compose run --rm -T ckan_init_database
+  ckan_init_database:
+    image: localhost/ckan:${CKAN_TAG}
+    user: '1000:1000'
+    environment: *ckan_environment
+    entrypoint:
+    - ckan
+    - db
+    - init
+
+  solr:
+    image: ckan/ckan-solr:2.10-solr9.8
+    volumes:
+    - type: volume
+      source: solr_data
+      target: /var/solr
+    ports:
+    - '127.0.0.1:18983:8983'
+
+  redis:
+    image: redis:6
+    ports:
+    - '127.0.0.1:16379:6379'
+
+  postgres:
+    image: postgres:15-alpine
+    volumes:
+    - type: volume
+      source: pg_data
+      target: /var/lib/postgresql/data
+    - type: bind
+      source: ./db-init-scripts/
+      target: /docker-entrypoint-initdb.d/
+      read_only: true
+    - type: bind
+      source: ./secrets/postgres
+      target: /secrets/
+      read_only: true
+    environment:
+      POSTGRES_PASSWORD_FILE: /secrets/postgres-password
+    ports:
+    - '127.0.0.1:15432:5432'
