@@ -36,6 +36,4 @@ jobs:
       with:
         targets: 'default'
         push: true
-        set: |
-          default.tags=ghcr.io/helix-gr/ckan:${{ env.CKAN_TAG }}
 
