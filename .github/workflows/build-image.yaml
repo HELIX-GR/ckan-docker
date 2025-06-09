@@ -1,4 +1,4 @@
-ame: Build image
+name: Build image
 run-name: build image
 
 on: 
