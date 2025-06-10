@@ -10,8 +10,7 @@ target "base-builder" {
     ckan_tag="${ckan_tag}"
   }
   dockerfile = "base-builder.dockerfile"
-  tags = [
-  ]
+  tags = []
 }
 
 target "runtime" {
@@ -23,8 +22,7 @@ target "runtime" {
   contexts = {
     "builder" = "target:base-builder" 
   }
-  tags = [
-  ]
+  tags = []
 }
 
 target "gunicorn-server" {
@@ -37,8 +35,8 @@ target "gunicorn-server" {
     "runtime" = "target:runtime" 
   }
   tags = [
-    "localhost/ckan:${ckan_tag}",
-    "localhost/ckan:${ckan_tag}-gunicorn"
+    "ghcr.io/helix-gr/ckan:${ckan_tag}",
+    "ghcr.io/helix-gr/ckan:${ckan_tag}-gunicorn"
   ]
 }
 
@@ -52,7 +50,7 @@ target "simple-server" {
     "runtime" = "target:runtime" 
   }
   tags = [
-    "localhost/ckan:${ckan_tag}-simple-server"
+    "ghcr.io/helix-gr/ckan:${ckan_tag}-simple-server"
   ]
 }
 

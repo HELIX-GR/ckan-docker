@@ -1,10 +1,10 @@
-ame: Build image
+name: Build image
 run-name: build image
 
 on: 
   push:
     branches:
-    - 'github-workflows'
+    - 'build-*'
     tags:
     - '*'
   
@@ -32,4 +32,8 @@ jobs:
     - uses: docker/setup-buildx-action@v3
       with:
         driver: docker
+    - uses: docker/bake-action@v4
+      with:
+        targets: 'default'
+        push: true
 
