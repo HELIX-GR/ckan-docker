@@ -4,7 +4,7 @@ run-name: build image
 on: 
   push:
     branches:
-    - 'github-workflows'
+    - 'build-*'
     tags:
     - '*'
   
