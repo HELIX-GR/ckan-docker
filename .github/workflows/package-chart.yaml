@@ -1,0 +1,32 @@
+name: Package Helm chart
+run-name: package-chart
+
+on: 
+  push:
+    branches:
+    - 'charts'
+  
+permissions:
+  actions: read
+  checks: read
+  contents: write
+  packages: write
+  repository-projects: read
+  statuses: read
+ 
+jobs:
+
+  build_image: 
+    runs-on: ubuntu-22.04
+    env:
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Configure Git
+      run: |-
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+    - uses: helm/chart-releaser-action@v1.7.0
+      env:
+        CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    
