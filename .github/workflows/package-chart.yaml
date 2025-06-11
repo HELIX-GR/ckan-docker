@@ -18,7 +18,7 @@ jobs:
 
   build_image: 
     runs-on: ubuntu-22.04
-    env:
+    env: {}
     steps:
     - uses: actions/checkout@v4
       with:
