@@ -16,7 +16,7 @@ permissions:
  
 jobs:
 
-  build_image: 
+  package: 
     runs-on: ubuntu-22.04
     env: {}
     steps:
