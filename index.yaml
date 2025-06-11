@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  ckan:
+  - apiVersion: v2
+    appVersion: "2.10"
+    created: "2025-06-11T23:56:12.366382912Z"
+    description: A Helm chart for CKAN
+    digest: 7dd22acbd05d8bf33380333d3fbdc2e00b8d84b32b45b6cdeb4c23664fc56b25
+    name: ckan
+    type: application
+    urls:
+    - https://github.com/HELIX-GR/ckan-docker/releases/download/ckan-0.1.0/ckan-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-06-11T23:56:12.36639198Z"
