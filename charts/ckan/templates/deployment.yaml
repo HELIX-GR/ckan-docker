@@ -1,0 +1,152 @@
+# vim: set syntax=helm:
+
+{{- $fullname := (include "ckan.fullname" .) }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullname }}-ckan
+  labels:
+    {{- include "ckan.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "ckan.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ckan.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+      - 
+        name: prepare-config
+        {{- with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}{{/* with .Values.securityContext */}}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        {{- include "ckan.envFrom" . | nindent 8 }}
+        workingDir: /etc/ckan/default
+        command: 
+        - bash
+        - -xue
+        - -c
+        - |-
+          ckan generate config ckan.ini
+          iniFile=$(mktemp --suffix '.ini')
+          find /config -maxdepth 2 -iname '*.ini' | sort | while read -r f; do
+            cat ${f} && echo
+          done | cat -s > ${iniFile}
+          ckan config-tool ckan.ini -f ${iniFile}
+        volumeMounts:
+        - name: runtime-config
+          mountPath: /etc/ckan/default
+        - name: config-generated
+          mountPath: /config/01-generated
+          readOnly: true
+        {{- range $i, $config := .Values.configFrom }}
+        {{- range $key := (get $config "keys") }}
+        - name: {{ printf "config-imported-%d" ($i | add1) }}
+          mountPath: {{ printf "/config/02-imported-%d/%s" ($i | add1) $key }}
+          subPath: {{ $key }}
+          readOnly: true
+        {{- end }}{{/* range keys */}}
+        {{- end }}{{/* range .Values.configFrom */}}
+      containers:
+      - 
+        name: ckan
+        {{- with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}{{/* with .Values.securityContext */}}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        {{- include "ckan.envFrom" . | nindent 8 }}
+        env:
+        - name: CKAN_MAX_UPLOAD_SIZE_MB
+          value: {{ .Values.config.maxUploadSizeMegabytes | quote }}
+        - name: CKAN_STORAGE_PATH
+          value: /var/lib/ckan/default
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.port }}
+          protocol: TCP
+        {{- with .Values.livenessProbe }}
+        livenessProbe:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.readinessProbe }}
+        readinessProbe:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+        - name: runtime-config
+          mountPath: /etc/ckan/default
+        - name: data
+          mountPath: /var/lib/ckan/default
+          {{- with .Values.data.subPath }}
+          subPath: {{ . }}
+          {{- end }}
+        {{- with .Values.extraVolumeMounts }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}{{/* with .Values.extraVolumeMounts */}}
+      volumes:
+      - name: runtime-config
+        emptyDir: {}
+      - name: config-generated
+        secret:
+          secretName: {{ $fullname }}-config-generated
+          defaultMode: 0640
+      {{- range $i, $config := .Values.configFrom }}
+      - name: {{ printf "config-imported-%d" ($i | add1) }}
+      {{- if (get $config "secretName") }}
+        secret:
+          secretName: {{ get $config "secretName" }}
+          defaultMode: 0640
+      {{- else }}
+        configMap:
+          name: {{ get $config "configMapName" }}
+      {{- end }}
+      {{- end }}{{/* range .Values.configFrom */}}
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.data.pvcName }} 
+      {{- with .Values.extraVolumes }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}{{/* with .Values.extraVolumes */}}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,143 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/helix-gr/ckan-base
+  pullPolicy: IfNotPresent
+  tag: "ckan-2.10.8-gunicorn"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+data:
+  pvcName: ckan-data
+  #subPath: data
+
+# basic configuration
+config:
+  url: https://ckan.example.com
+  maxUploadSizeMegabytes: 12
+  redis:
+    url: redis://redis.default.cluster.local:6379/1
+  solr:
+    url: http://solr.default.svc.cluster.local:8983/solr/ckan 
+  session: # beaker
+    encryptKey:
+      # expects key "key"
+      secretName: ckan-session-encrypt-key
+    validateKey: 
+      # expects key "key"
+      secretName: ckan-session-validate-key
+  csrfProtection:
+    secret:
+      # expects key "key"
+      secretName: ckan-csrf-secret
+  database:
+    host: postgres.default.svc.cluster.local
+    port: 5432
+    dbname: ckan
+    username: ckan
+    password:
+      # expects key "password"
+      secretName: ckan-database-password
+  mail:
+    smtp:
+      # secret must hold keys: "server", "user", "password"
+      secretName: ckan-smtp
+    from: ckan@example.com 
+
+# additional configuration to be merged to main ckan.ini
+configFrom:
+#- secretName: ckan-config-extra-1
+#  keys: [ "foo.ini" ]
+#- configMapName: ckan-config-extra-2
+#  keys: [ "baz.ini" ]
+
+# CKAN admin account (to be created, if not exists)
+admin:
+  #name: admin1
+  #email: admin1@ckan.example.net
+  #password:
+  #  # expects key "password"
+  #  secretName: ckan-admin-password
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  capabilities:
+    drop:
+     - ALL
+  #readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+service:
+  type: ClusterIP
+  port: 5000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+  - host: chart-example.local
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  #- secretName: chart-example-tls
+  #  hosts:
+  #  - chart-example.local
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+livenessProbe:
+  initialDelaySeconds: 15
+  periodSeconds: 30
+  httpGet:
+    path: /
+    port: 5000
+
+readinessProbe:
+  initialDelaySeconds: 15
+  periodSeconds: 30
+  httpGet:
+    path: /
+    port: 5000
+
+# Additional volumes on the output Deployment definition.
+extraVolumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+extraVolumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+extraEnv:
+  #configMapName: ...
+  # or ..
+  #secretName: ...
+ 
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

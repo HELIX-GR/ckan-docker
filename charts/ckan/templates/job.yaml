@@ -1,0 +1,125 @@
+# vim: set syntax=helm:
+
+{{- $fullname := (include "ckan.fullname" .) }}
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $fullname }}-ckan-database-init
+  labels:
+    {{- include "ckan.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: "post-install"
+    helm.sh/hook-delete-policy: "before-hook-creation" 
+    helm.sh/hook-weight: "1"
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "ckan.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - 
+        name: db-init
+        {{- with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}{{/* with .Values.securityContext */}}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        {{- include "ckan.envFrom" . | nindent 8 }}
+        command:
+        - bash
+        - -xue
+        - -c
+        - |-
+          ckan db init && ckan db version
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      restartPolicy: Never
+
+---
+{{- if .Values.admin }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $fullname }}-ckan-admin-add
+  labels:
+    {{- include "ckan.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: "post-install"
+    helm.sh/hook-delete-policy: "before-hook-creation" 
+    helm.sh/hook-weight: "5"
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "ckan.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - 
+        name: add-admin
+        {{- with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}{{/* with .Values.securityContext */}}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        {{- include "ckan.envFrom" . | nindent 8 }}
+        env:
+        {{- with .Values.admin }}
+        - name: username
+          value: {{ .name }}
+        - name: email
+          value: {{ .email }}
+        - name: password
+          valueFrom:
+            secretKeyRef:
+              name: {{ .password.secretName }}
+              key: password
+        {{- end }}{{/* with .Values.admin */}}  
+        command:
+        - bash
+        - -xue
+        - -c
+        - |-
+          if ! ckan user list | grep -qxF -e "name=${username}"; then
+            ckan user add ${username} email=${email} name=${username} password="${password}"
+            ckan sysadmin add ${username}
+          fi  
+        resources:
+          requests:
+            cpu: 250m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      restartPolicy: Never
+
+{{- end }}{{/* if .Values.admin */}}
+
+
