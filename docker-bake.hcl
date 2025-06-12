@@ -13,6 +13,18 @@ target "base-builder" {
   tags = []
 }
 
+target "builder" {
+  context = "."
+  args = {
+    ckan_tag="${ckan_tag}"
+  }
+  dockerfile = "builder.dockerfile"
+  contexts = {
+    "base-builder" = "target:base-builder"
+  }
+  tags = []
+}
+
 target "runtime" {
   context = "."
   args = {
@@ -20,7 +32,7 @@ target "runtime" {
   }
   dockerfile = "runtime.dockerfile"
   contexts = {
-    "builder" = "target:base-builder" 
+    "builder" = "target:builder"
   }
   tags = [
     "ghcr.io/helix-gr/ckan-base:${ckan_tag}"
