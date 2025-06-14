@@ -55,7 +55,7 @@ spec:
           iniFile=$(mktemp --suffix '.ini')
           find /config -maxdepth 2 -iname '*.ini' | sort | while read -r f; do
             cat ${f} && echo
-          done | cat -s > ${iniFile}
+          done | cat -s | tee ${iniFile}
           ckan config-tool ckan.ini -f ${iniFile}
         volumeMounts:
         - name: runtime-config
