@@ -3,6 +3,16 @@ entries:
   ckan:
   - apiVersion: v2
     appVersion: "2.10"
+    created: "2025-06-14T12:49:38.993038721Z"
+    description: A Helm chart for CKAN
+    digest: cbda56eb6ea05413f67816ffd4facd2b9c6668abf81041a353ab107fbe5fb66b
+    name: ckan
+    type: application
+    urls:
+    - https://github.com/HELIX-GR/ckan-docker/releases/download/ckan-0.3.0/ckan-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: "2.10"
     created: "2025-06-14T10:33:46.785382952Z"
     description: A Helm chart for CKAN
     digest: e537b4b9476f1906d46b956a6da17b5c60922b29f3b88c2452a69154d1a49648
@@ -21,4 +31,4 @@ entries:
     urls:
     - https://github.com/HELIX-GR/ckan-docker/releases/download/ckan-0.1.0/ckan-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-14T10:33:46.785421023Z"
+generated: "2025-06-14T12:49:38.993056956Z"
