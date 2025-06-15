@@ -6,11 +6,11 @@ variable "ckan_tag" {
 
 variable "hdx_ckan_tag" {
   # https://github.com/HELIX-GR/hdx-ckan/
-  default = "heallink-0.1"
+  default = "heallink-0.1a"
 }
 
 variable hdx_ckan_image_tag {
-  default = trimprefix("${hdx_ckan_tag}", "heallink-")
+  default = regex_replace("${hdx_ckan_tag}", "heallink-([0-9]+([.][0-9]+){1,2})([a-z])?$", "$1")
 }
 
 target "base-builder" {
@@ -26,6 +26,7 @@ target "builder" {
   context = "."
   args = {
     ckan_tag="${ckan_tag}"
+    hdx_ckan_tag="${hdx_ckan_tag}"
   }
   dockerfile = "builder.dockerfile"
   contexts = {
