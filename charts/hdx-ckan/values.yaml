@@ -7,6 +7,13 @@ ckan:
     repository: ghcr.io/helix-gr/hdx-ckan
     tag: 0.1-ckan-2.10.8-gunicorn
   config:
+    basicPluginsEnabled:
+    - activity
+    - stats
+    - text_view
+    - image_view
+    - expire_api_token
+    - resource_proxy
     extensionPluginsEnabled:
     - hdx_theme
     - hdx_search
@@ -15,13 +22,7 @@ ckan:
     - hdx_pages
     - ytp_request
     - hierarchy_display
-    - resource_proxy
-    - activity
-    - stats
-    - text_view
-    - image_view
     - oauth2
-    - expire_api_token
 
 global:
   # OAuth2
