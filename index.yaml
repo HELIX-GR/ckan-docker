@@ -34,6 +34,20 @@ entries:
   hdx-ckan:
   - apiVersion: v2
     appVersion: 0.1-ckan-2.10
+    created: "2025-07-18T09:21:03.188162392Z"
+    dependencies:
+    - name: ckan
+      repository: https://helix-gr.github.io/ckan-docker
+      version: 0.3.0
+    description: A Helm chart for HDX CKAN (https://github.com/HELIX-GR/hdx-ckan)
+    digest: 72a73c0bbd027eb27e072a17135dfbdbaff821895251753b8bb8f28b9904d17f
+    name: hdx-ckan
+    type: application
+    urls:
+    - https://github.com/HELIX-GR/ckan-docker/releases/download/hdx-ckan-0.2.0/hdx-ckan-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.1-ckan-2.10
     created: "2025-06-15T09:57:32.382711189Z"
     dependencies:
     - name: ckan
@@ -46,4 +60,4 @@ entries:
     urls:
     - https://github.com/HELIX-GR/ckan-docker/releases/download/hdx-ckan-0.1.0/hdx-ckan-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-15T09:57:32.38272235Z"
+generated: "2025-07-18T09:21:03.188186387Z"
