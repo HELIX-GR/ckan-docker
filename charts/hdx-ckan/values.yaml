@@ -1,7 +1,7 @@
 nameOverride: ""
 fullnameOverride: ""
 
-# override parts of parent (subchart)
+# override parts of "ckan" subchart
 ckan:
   image: 
     repository: ghcr.io/helix-gr/hdx-ckan
@@ -9,8 +9,6 @@ ckan:
   config:
     extensionPluginsEnabled:
     - hdx_theme
-    - hdx_users
-    - hdx_user_extra
     - hdx_search
     - hdx_package
     - hdx_org_group
@@ -18,4 +16,27 @@ ckan:
     - ytp_request
     - hierarchy_display
     - resource_proxy
+    - activity
+    - stats
+    - text_view
+    - image_view
+    - oauth2
+    - expire_api_token
+
+global:
+  # OAuth2
+  oauth2: 
+    authorizationUrl: https://iam.example.net/oidc/authorize
+    tokenUrl: https://iam.example.net/oidc/token
+    userinfoUrl: https://iam.example.net/oidc/userinfo
+    client:
+      # reference a secret with client-{id,secret} keys
+      secretName: oauth2-client
+  # Datacite
+  datacite:
+    prefix: '10.0351'
+    apiUrl: https://api.test.datacite.org/dois
+    auth:
+      # reference a secret with {username,password} keys
+      secretName: datacite-auth
 
