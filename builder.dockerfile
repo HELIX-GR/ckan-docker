@@ -2,7 +2,7 @@
 
 FROM base-builder
 
-ARG ckanext_hierarchy_tag="heallink-0.1" ckanext_oauth2_tag="heallink-0.1" hdx_ckan_tag="heallink-0.1"
+ARG ckanext_hierarchy_tag="heallink-0.1" ckanext_oauth2_tag="heallink-0.1b" hdx_ckan_tag="heallink-0.1"
 
 ADD https://github.com/HELIX-GR/ckanext-hierarchy/archive/refs/tags/${ckanext_hierarchy_tag}.tar.gz ./ckanext-hierarchy.tar.gz
 ADD https://github.com/HELIX-GR/ckanext-oauth2/archive/refs/tags/${ckanext_oauth2_tag}.tar.gz ./ckanext-oauth2.tar.gz
