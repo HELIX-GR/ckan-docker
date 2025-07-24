@@ -17,7 +17,7 @@ RUN addgroup --gid 1000 ckan && \
   mkdir -vp /etc/ckan/default && chown ckan:ckan -vR /etc/ckan/
 
 RUN ( ckan_install_dir=/usr/local/lib/python3.9/site-packages/ckan-${ckan_tag##ckan-}-py3.9.egg/ckan/; \
-  chown root:ckan -vR ${ckan_install_dir}/public && chmod 0775 -vR ${ckan_install_dir}/public; )
+  chown root:ckan -R ${ckan_install_dir}/public && chmod 0775 -R ${ckan_install_dir}/public; )
 
 USER ckan
 ENV CKAN_INI=/etc/ckan/default/ckan.ini

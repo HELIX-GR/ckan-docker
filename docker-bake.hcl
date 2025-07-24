@@ -55,8 +55,24 @@ target "simple-server" {
   ]
 }
 
+target "dev" {
+  context = "."
+  args = {
+    ckan_tag="${ckan_tag}"
+  }
+  dockerfile = "run-with-simple-server-dev.dockerfile"
+  contexts = {
+    "runtime" = "target:runtime" 
+  }
+  tags = [
+    "ghcr.io/helix-gr/ckan-base:${ckan_tag}-dev"
+  ]
+}
+
 group "default" {
   targets = [
-    "gunicorn-server"
+    "gunicorn-server",
+    "simple-server",
+    "dev"
   ]
 }
