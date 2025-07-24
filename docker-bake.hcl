@@ -96,7 +96,7 @@ target "dev" {
     "runtime" = "target:runtime" 
   }
   tags = [
-    "ghcr.io/helix-gr/hdx-ckan:${ckan_tag}-dev"
+    "ghcr.io/helix-gr/hdx-ckan:${hdx_ckan_image_tag}-${ckan_tag}-dev"
   ]
 }
 
