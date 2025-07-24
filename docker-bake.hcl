@@ -6,12 +6,12 @@ variable "ckan_tag" {
 
 variable "hdx_ckan_tag" {
   # https://github.com/HELIX-GR/hdx-ckan/
-  default = "heallink-0.1d"
+  default = "heallink-0.1e"
 }
 
 variable "ckanext_oauth2_tag" {
   # https://github.com/HELIX-GR/ckanext-oauth2
-  default = "heallink-0.1c"
+  default = "heallink-0.1d"
 }
 
 variable hdx_ckan_image_tag {
