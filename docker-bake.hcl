@@ -9,6 +9,11 @@ variable "hdx_ckan_tag" {
   default = "heallink-0.1e"
 }
 
+variable "ckanext_hierarchy_tag" {
+  # https://github.com/HELIX-GR/ckanext-hierarchy
+  default = "heallink-0.1a"
+}
+
 variable "ckanext_oauth2_tag" {
   # https://github.com/HELIX-GR/ckanext-oauth2
   default = "heallink-0.1f"
@@ -32,6 +37,7 @@ target "builder" {
   args = {
     ckan_tag="${ckan_tag}"
     hdx_ckan_tag="${hdx_ckan_tag}"
+    ckanext_hierarchy_tag="${ckanext_hierarchy_tag}"
     ckanext_oauth2_tag="${ckanext_oauth2_tag}"
   }
   dockerfile = "builder.dockerfile"
