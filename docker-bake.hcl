@@ -4,6 +4,10 @@ variable "ckan_tag" {
   default = "ckan-2.10.8"
 }
 
+variable "ckanapi_tag" {
+  default = "4.8"
+}
+
 variable "hdx_ckan_tag" {
   # https://github.com/HELIX-GR/hdx-ckan/
   default = "heallink-0.1f"
@@ -92,17 +96,15 @@ target "simple-server" {
   ]
 }
 
-target "dev" {
+target "ckanapi" {
   context = "."
   args = {
-    ckan_tag="${ckan_tag}"
+    ckanapi_tag="${ckanapi_tag}"
   }
-  dockerfile = "run-with-simple-server-dev.dockerfile"
-  contexts = {
-    "runtime" = "target:runtime" 
-  }
+  dockerfile = "ckanapi.dockerfile"
+  contexts = {}
   tags = [
-    "ghcr.io/helix-gr/hdx-ckan:${hdx_ckan_image_tag}-${ckan_tag}-dev"
+    "ghcr.io/helix-gr/ckanapi:${ckanapi_tag}"
   ]
 }
 
@@ -110,6 +112,6 @@ group "default" {
   targets = [
     "gunicorn-server",
     "simple-server",
-    "dev"
+    "ckanapi"
   ]
 }
