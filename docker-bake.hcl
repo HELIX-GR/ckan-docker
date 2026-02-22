@@ -15,7 +15,7 @@ variable "hdx_ckan_tag" {
 
 variable "ckanext_hierarchy_tag" {
   # https://github.com/HELIX-GR/ckanext-hierarchy
-  default = "heallink-0.1e"
+  default = "heallink-0.1f"
 }
 
 variable "ckanext_oauth2_tag" {
