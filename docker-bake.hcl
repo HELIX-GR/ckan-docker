@@ -10,7 +10,7 @@ variable "ckanapi_tag" {
 
 variable "hdx_ckan_tag" {
   # https://github.com/HELIX-GR/hdx-ckan/
-  default = "heallink-0.14.0"
+  default = "heallink-0.15.0"
 }
 
 variable "ckanext_hierarchy_tag" {
