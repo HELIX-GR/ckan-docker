@@ -10,7 +10,7 @@ variable "ckanapi_tag" {
 
 variable "hdx_ckan_tag" {
   # https://github.com/HELIX-GR/hdx-ckan/
-  default = "heallink-0.20.0"
+  default = "heallink-0.21.0"
 }
 
 variable "ckanext_hierarchy_tag" {
@@ -21,6 +21,11 @@ variable "ckanext_hierarchy_tag" {
 variable "ckanext_oauth2_tag" {
   # https://github.com/HELIX-GR/ckanext-oauth2
   default = "heallink-0.4.0"
+}
+
+variable "ckanext_oaipmh_server_tag" {
+  # https://github.com/HELIX-GR/ckanext-oaipmh-server
+  default = "heallink-0.1"
 }
 
 variable hdx_ckan_image_tag {
@@ -43,6 +48,7 @@ target "builder" {
     hdx_ckan_tag="${hdx_ckan_tag}"
     ckanext_hierarchy_tag="${ckanext_hierarchy_tag}"
     ckanext_oauth2_tag="${ckanext_oauth2_tag}"
+    ckanext_oaipmh_server_tag="${ckanext_oaipmh_server_tag}"
   }
   dockerfile = "builder.dockerfile"
   contexts = {
