@@ -21,7 +21,8 @@ RUN mkdir ckanext-oauth2 && tar xzf ./ckanext-oauth2.tar.gz -C ckanext-oauth2 --
   rm -v ./ckanext-oauth2.tar.gz
 
 RUN mkdir ckanext-oaipmh-server && tar xzf ./ckanext-oaipmh-server.tar.gz -C ckanext-oaipmh-server --strip-components=1 && \
-  (cd ckanext-oaipmh-server && python setup.py install) && \
+  (cd ckanext-oaipmh-server && \
+    pip install -r requirements.txt && python setup.py install) && \
   rm -v ./ckanext-oaipmh-server.tar.gz
 
 RUN mkdir hdx-ckan && tar xvf ./hdx-ckan.tar.gz -C hdx-ckan --strip-components=1 && \

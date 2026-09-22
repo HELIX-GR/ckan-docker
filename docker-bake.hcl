@@ -25,7 +25,7 @@ variable "ckanext_oauth2_tag" {
 
 variable "ckanext_oaipmh_server_tag" {
   # https://github.com/HELIX-GR/ckanext-oaipmh-server
-  default = "heallink-0.1"
+  default = "heallink-0.2"
 }
 
 variable "hdx_ckan_image_tag" {
