@@ -28,8 +28,13 @@ variable "ckanext_oaipmh_server_tag" {
   default = "heallink-0.1"
 }
 
-variable hdx_ckan_image_tag {
+variable "hdx_ckan_image_tag" {
   default = regex_replace("${hdx_ckan_tag}", "heallink-([0-9]+([.][0-9]+){1,2})([a-z])?$", "$1")
+}
+
+variable "tag" {
+  # a build-specific tag (independent from repo tags); should be passed as env variable
+  default = "4df99de"
 }
 
 target "base-builder" {
@@ -83,6 +88,7 @@ target "gunicorn-server" {
     "runtime" = "target:runtime" 
   }
   tags = [
+    "ghcr.io/helix-gr/hdx-ckan:${tag}-gunicorn",
     "ghcr.io/helix-gr/hdx-ckan:${hdx_ckan_image_tag}-${ckan_tag}-gunicorn"
   ]
 }
@@ -98,6 +104,7 @@ target "simple-server" {
     "runtime" = "target:runtime" 
   }
   tags = [
+    "ghcr.io/helix-gr/hdx-ckan:${tag}-simple-server",
     "ghcr.io/helix-gr/hdx-ckan:${hdx_ckan_image_tag}-${ckan_tag}-simple-server"
   ]
 }
@@ -110,6 +117,7 @@ target "ckanapi" {
   dockerfile = "ckanapi.dockerfile"
   contexts = {}
   tags = [
+    "ghcr.io/helix-gr/ckanapi:${tag}",
     "ghcr.io/helix-gr/ckanapi:${ckanapi_tag}"
   ]
 }
