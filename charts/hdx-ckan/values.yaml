@@ -1,0 +1,21 @@
+nameOverride: ""
+fullnameOverride: ""
+
+# override parts of parent (subchart)
+ckan:
+  image: 
+    repository: ghcr.io/helix-gr/hdx-ckan
+    tag: 0.1-ckan-2.10.8-gunicorn
+  config:
+    extensionPluginsEnabled:
+    - hdx_theme
+    - hdx_users
+    - hdx_user_extra
+    - hdx_search
+    - hdx_package
+    - hdx_org_group
+    - hdx_pages
+    - ytp_request
+    - hierarchy_display
+    - resource_proxy
+

@@ -16,11 +16,12 @@ RUN addgroup --gid 1000 ckan && \
   adduser --disabled-password --uid 1000 --gid 1000 --gecos '' ckan && \
   mkdir -vp /etc/ckan/default && chown ckan:ckan -vR /etc/ckan/
 
-RUN ( ckan_public_dir=/usr/local/lib/python3.9/site-packages/ckan-${ckan_tag##ckan-}-py3.9.egg/ckan/public; \
-  chown root:ckan -vR ${ckan_public_dir} && chmod 0775 -vR ${ckan_public_dir} )
+RUN ( ckan_install_dir=/usr/local/lib/python3.9/site-packages/ckan-${ckan_tag##ckan-}-py3.9.egg/ckan/; \
+  chown root:ckan -vR ${ckan_install_dir}/public && chmod 0775 -vR ${ckan_install_dir}/public; )
 
 USER ckan
-WORKDIR /etc/ckan/default/
-RUN ckan generate config ckan.ini
-
 ENV CKAN_INI=/etc/ckan/default/ckan.ini
+
+RUN ckan generate config ${CKAN_INI} 
+
+WORKDIR /var/lib/ckan/default/

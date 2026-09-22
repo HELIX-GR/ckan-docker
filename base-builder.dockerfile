@@ -10,9 +10,9 @@ RUN apt-get update && \
 WORKDIR /usr/local/src
 
 ADD https://github.com/ckan/ckan/archive/refs/tags/${ckan_tag}.tar.gz .
-RUN tar xzf ${ckan_tag}.tar.gz && ln -s ckan-${ckan_tag} ckan
 
-WORKDIR /usr/local/src/ckan
-RUN pip install 'setuptools>=66.1,<66.2' && pip install -r requirements.txt && \
-  python setup.py install
+RUN mkdir ckan && tar xzf ${ckan_tag}.tar.gz -C ckan --strip-components=1
+
+RUN ( cd /usr/local/src/ckan && \
+    pip install 'setuptools>=66.1,<66.2' && pip install -r requirements.txt && python setup.py install; )
 
