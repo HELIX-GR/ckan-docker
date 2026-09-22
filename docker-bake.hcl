@@ -8,6 +8,11 @@ variable "ckanapi_tag" {
   default = "4.8"
 }
 
+variable "tag" {
+  # a build-specific tag (independent from repo tags); should be passed as env variable
+  default = "4df99de"
+}
+
 target "base-builder" {
   context = "."
   args = {
@@ -41,6 +46,7 @@ target "gunicorn-server" {
     "runtime" = "target:runtime" 
   }
   tags = [
+    "ghcr.io/helix-gr/ckan-base:${tag}-gunicorn",
     "ghcr.io/helix-gr/ckan-base:${ckan_tag}-gunicorn"
   ]
 }
@@ -55,6 +61,7 @@ target "simple-server" {
     "runtime" = "target:runtime" 
   }
   tags = [
+    "ghcr.io/helix-gr/ckan-base:${tag}-simple-server",
     "ghcr.io/helix-gr/ckan-base:${ckan_tag}-simple-server"
   ]
 }

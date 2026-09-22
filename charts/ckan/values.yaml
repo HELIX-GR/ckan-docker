@@ -16,6 +16,13 @@ data:
 # basic configuration
 config:
   url: https://ckan.example.com
+  basicPluginsEnabled:
+  - activity
+  - stats
+  - text_view
+  - image_view
+  extensionPluginsEnabled: 
+    []    
   maxUploadSizeMegabytes: 12
   redis:
     url: redis://redis.default.cluster.local:6379/1

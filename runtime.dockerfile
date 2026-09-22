@@ -1,6 +1,6 @@
 # vim: set syntax=dockerfile:
 
-FROM python:3.9.23-slim-bullseye
+FROM python:3.9.23-slim-bookworm
 
 ARG ckan_tag=ckan-2.10.8
 

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: ckan
-description: A Helm chart for CKAN
+name: hdx-ckan
+description: A Helm chart for HDX CKAN (https://github.com/HELIX-GR/hdx-ckan)
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -15,10 +15,17 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.3.0
+version: 0.1.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "2.10"
+appVersion: "0.1-ckan-2.10"
+
+
+dependencies:
+- name: ckan
+  version: 0.3.0
+  repository: "https://helix-gr.github.io/ckan-docker"
+
