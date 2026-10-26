@@ -2,11 +2,16 @@
 
 FROM base-builder
 
-ARG ckanext_hierarchy_tag="heallink-0.1" ckanext_oauth2_tag="heallink-0.1" ckanext_oaipmh_server_tag="heallink-0.1" hdx_ckan_tag="heallink-0.1"
+ARG ckanext_hierarchy_tag="heallink-0.1" \
+  ckanext_oauth2_tag="heallink-0.1" \
+  ckanext_oaipmh_server_tag="heallink-0.1" \
+  ckanext_restricted_tag="heallink-0.1" \
+  hdx_ckan_tag="heallink-0.1"
 
 ADD https://github.com/HELIX-GR/ckanext-hierarchy/archive/refs/tags/${ckanext_hierarchy_tag}.tar.gz ./ckanext-hierarchy.tar.gz
 ADD https://github.com/HELIX-GR/ckanext-oauth2/archive/refs/tags/${ckanext_oauth2_tag}.tar.gz ./ckanext-oauth2.tar.gz
 ADD https://github.com/HELIX-GR/ckanext-oaipmh-server/archive/refs/tags/${ckanext_oaipmh_server_tag}.tar.gz ./ckanext-oaipmh-server.tar.gz
+ADD https://github.com/HELIX-GR/ckanext-restricted/archive/refs/tags/${ckanext_restricted_tag}.tar.gz ./ckanext-restricted.tar.gz
 ADD https://github.com/HELIX-GR/hdx-ckan/archive/refs/tags/${hdx_ckan_tag}.tar.gz ./hdx-ckan.tar.gz
 
 # needed for requirements.txt of hdx-ckan
@@ -24,6 +29,10 @@ RUN mkdir ckanext-oaipmh-server && tar xzf ./ckanext-oaipmh-server.tar.gz -C cka
   (cd ckanext-oaipmh-server && \
     pip install -r requirements.txt && python setup.py install) && \
   rm -v ./ckanext-oaipmh-server.tar.gz
+
+RUN mkdir ckanext-restricted && tar xzf ./ckanext-restricted.tar.gz -C ckanext-restricted --strip-components=1 && \
+  (cd ckanext-restricted && python setup.py install) && \
+  rm -v ./ckanext-restricted.tar.gz
 
 RUN mkdir hdx-ckan && tar xvf ./hdx-ckan.tar.gz -C hdx-ckan --strip-components=1 && \
   (cd hdx-ckan && pip install -r requirements.txt --upgrade-strategy only-if-needed) && \
