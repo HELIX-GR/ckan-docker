@@ -138,10 +138,10 @@ extraVolumeMounts: []
 #   mountPath: "/etc/foo"
 #   readOnly: true
 
-extraEnv:
-  #configMapName: ...
+extraEnv: []
+  # - configMapName: ...
   # or ..
-  #secretName: ...
+  # - secretName: ...
  
 nodeSelector: {}
 
