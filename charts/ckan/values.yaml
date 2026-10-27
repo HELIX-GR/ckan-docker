@@ -16,6 +16,13 @@ data:
 # basic configuration
 config:
   url: https://ckan.example.com
+  basicPluginsEnabled:
+  - activity
+  - stats
+  - text_view
+  - image_view
+  extensionPluginsEnabled: 
+    []    
   maxUploadSizeMegabytes: 12
   redis:
     url: redis://redis.default.cluster.local:6379/1
@@ -44,7 +51,12 @@ config:
     smtp:
       # secret must hold keys: "server", "user", "password"
       secretName: ckan-smtp
-    from: ckan@example.com 
+    # sender (usually a no-reply account)
+    from: noreply-ckan@example.com
+    # email for Reply-To header (usually an admin email with a proper mailbox)
+    # (see https://docs.ckan.org/en/2.10/maintaining/configuration.html#email-to)
+    #to: ckan@example.com
+    to: ~
 
 # additional configuration to be merged to main ckan.ini
 configFrom:
@@ -131,10 +143,10 @@ extraVolumeMounts: []
 #   mountPath: "/etc/foo"
 #   readOnly: true
 
-extraEnv:
-  #configMapName: ...
+extraEnv: []
+  # - configMapName: ...
   # or ..
-  #secretName: ...
+  # - secretName: ...
  
 nodeSelector: {}
 

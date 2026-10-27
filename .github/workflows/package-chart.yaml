@@ -5,7 +5,12 @@ on:
   push:
     branches:
     - 'charts'
-  
+
+concurrency:
+  group: ${{ github.workflow }}
+  # queue successive workflows, do not cancel!
+  cancel-in-progress: false
+
 permissions:
   actions: read
   checks: read
@@ -30,3 +35,5 @@ jobs:
     - uses: helm/chart-releaser-action@v1.7.0
       env:
         CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    
+      with:
+        packages_with_index: true

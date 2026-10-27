@@ -55,7 +55,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "ckan.envFrom" -}}
 - secretRef:
     name: {{ printf "%s-env-generated" (include "ckan.fullname" .) }}
-{{- with .Values.extraEnv }}
+{{- range .Values.extraEnv }}
 {{- if .configMapName }}
 - configMapRef:
     name: {{ .configMapName }}
@@ -63,6 +63,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 - secretRef:
     name: {{ .secretName }}
 {{- end }}{{/* if .configMapName */}}
-{{- end }}{{/* with .Values.extraEnv */}}
+{{- end }}{{/* range .Values.extraEnv */}}
 {{- end }}{{/* ckan.extraEnvFrom */}}
 
