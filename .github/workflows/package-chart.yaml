@@ -5,7 +5,12 @@ on:
   push:
     branches:
     - 'charts'
-  
+
+concurrency:
+  group: ${{ github.workflow }}
+  # queue successive workflows, do not cancel!
+  cancel-in-progress: false
+
 permissions:
   actions: read
   checks: read
