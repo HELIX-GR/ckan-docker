@@ -53,9 +53,10 @@ config:
       secretName: ckan-smtp
     # sender (usually a no-reply account)
     from: noreply-ckan@example.com
-    # see https://docs.ckan.org/en/2.10/maintaining/configuration.html#email-to
     # email for Reply-To header (usually an admin email with a proper mailbox)
-    to: ckan@example.com
+    # (see https://docs.ckan.org/en/2.10/maintaining/configuration.html#email-to)
+    #to: ckan@example.com
+    to: ~
 
 # additional configuration to be merged to main ckan.ini
 configFrom:
