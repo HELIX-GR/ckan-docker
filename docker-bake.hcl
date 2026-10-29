@@ -30,7 +30,7 @@ variable "ckanext_oaipmh_server_tag" {
 
 variable "ckanext_restricted_tag" {
   # https://github.com/HELIX-GR/ckanext-restricted
-  default = "heallink-0.1"
+  default = "heallink-0.2"
 }
 
 variable "hdx_ckan_image_tag" {
